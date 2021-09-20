@@ -34,11 +34,7 @@ export const CounterIncreaseMutation = extendType({
         await counter
           .increase({ from: accountId })
           .catch((err: any) => {
-            console.log(err)
-
-            const [error]: any = Object.values(err.data)
-
-            throw new Error(error?.reason)
+            throw new Error(err.message)
           })
 
         const countRes = await counter.read()
@@ -61,9 +57,7 @@ export const CounterDecreaseMutation = extendType({
         await counter
           .decrease({ from: accountId })
           .catch((err: any) => {
-            const [error]: any = Object.values(err.data)
-
-            throw new Error(error?.reason)
+            throw new Error(err.message)
           })
 
         const countRes = await counter.read()
@@ -86,9 +80,7 @@ export const CounterResetMutation = extendType({
         await counter
           .reset({ from: accountId })
           .catch((err: any) => {
-            const [error]: any = Object.values(err.data)
-
-            throw new Error(error?.reason)
+            throw new Error(err.message)
           })
 
         const countRes = await counter.read()

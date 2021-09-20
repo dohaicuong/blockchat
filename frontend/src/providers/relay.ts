@@ -1,45 +1,28 @@
-import {
-  Environment,
-  Network,
-  RecordSource,
-  Store,
+import { Environment, RecordSource, Store } from 'relay-runtime'
+import { authMiddleware, RelayNetworkLayer, uploadMiddleware, urlMiddleware } from 'react-relay-network-modern'
+import { keepRelayErrorMiddleware } from './keepRelayError'
 
-  RequestParameters,
-  Variables,
-  CacheConfig,
-  UploadableMap,
-} from 'relay-runtime'
+const {
+  REACT_APP_API_ENDPOINT = 'http://localhost:4000/graphql',
+} = process.env
 
-function fetchQuery(
-  operation: RequestParameters,
-  variables: Variables,
-  cacheConfig: CacheConfig,
-  uploadables: UploadableMap | null | undefined,
-) {
-  const accountId = localStorage.getItem('accountId')
-
-  return fetch('http://localhost:4000/graphql', {
-    method: 'POST',
-    headers: {
-      'content-type': 'application/json',
-      'Authorization': `Bearer ${accountId}`,
-    },
-    body: JSON.stringify({
-      query: operation.text,
-      variables,
+const network = new RelayNetworkLayer(
+  [
+    urlMiddleware({
+      url: () => Promise.resolve(REACT_APP_API_ENDPOINT),
     }),
-  })
-  .then(response => {
-    return response.json()
-  })
-}
+    authMiddleware({
+      token: () => localStorage.getItem('accountId') || '',
+    }),
+    uploadMiddleware(),
+    keepRelayErrorMiddleware()
+  ],
+  {
+    noThrow: true,
+  }
+)
 
-const network = Network.create(fetchQuery)
-const store = new Store(new RecordSource())
-
-const environment = new Environment({
+export default new Environment({
   network,
-  store
+  store: new Store(new RecordSource()),
 })
-
-export default environment
