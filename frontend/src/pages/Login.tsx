@@ -63,9 +63,9 @@ const Login = () => {
               required
               {...register('account')}
             >
-              {data.accounts.map(({ id }) => (
+              {data.accounts.map(({ id }, index) => (
                 <MenuItem key={id} value={id}>
-                  {id}
+                  {index === 0 ? 'Owner' : `Guest ${index}`}
                 </MenuItem>
               ))}
             </TextField>
