@@ -1,0 +1,11 @@
+{
+  "scripts": {
+    "start": "ganache-cli",
+    "deploy": "cd contracts & truffle compile & truffle deploy && cp -r ./build/contracts ../backend/"
+  },
+  "name": "contracts",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Eric Do",
+  "license": "MIT"
+}
