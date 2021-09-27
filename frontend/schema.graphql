@@ -7,18 +7,146 @@ type Account {
   id: ID!
 }
 
+type BlockChatMessage {
+  authorId: String!
+  id: ID!
+  message: String!
+  roomName: String!
+}
+
+type BlockChatMessageConnection {
+  """
+  https://facebook.github.io/relay/graphql/connections.htm#sec-Edge-Types
+  """
+  edges: [BlockChatMessageEdge!]!
+
+  """
+  https://facebook.github.io/relay/graphql/connections.htm#sec-undefined.PageInfo
+  """
+  pageInfo: PageInfo!
+}
+
+type BlockChatMessageEdge {
+  """https://facebook.github.io/relay/graphql/connections.htm#sec-Cursor"""
+  cursor: String!
+
+  """https://facebook.github.io/relay/graphql/connections.htm#sec-Node"""
+  node: BlockChatMessage!
+}
+
+type BlockChatRoom {
+  hostId: ID!
+  id: ID!
+  messages(
+    """Returns the elements in the list that come after the specified cursor"""
+    after: String
+
+    """Returns the first n elements from the list."""
+    first: Int!
+  ): BlockChatMessageConnection
+  name: String!
+  participantIds: [ID!]!
+}
+
+type BlockChatRoomConnection {
+  """
+  https://facebook.github.io/relay/graphql/connections.htm#sec-Edge-Types
+  """
+  edges: [BlockChatRoomEdge!]!
+
+  """
+  https://facebook.github.io/relay/graphql/connections.htm#sec-undefined.PageInfo
+  """
+  pageInfo: PageInfo!
+}
+
+type BlockChatRoomEdge {
+  """https://facebook.github.io/relay/graphql/connections.htm#sec-Cursor"""
+  cursor: String!
+
+  """https://facebook.github.io/relay/graphql/connections.htm#sec-Node"""
+  node: BlockChatRoom!
+}
+
 type Counter {
   count: Int!
   id: ID!
 }
 
+type MessageAddedPayload {
+  message: BlockChatMessage!
+}
+
+input MessageSendInput {
+  message: String!
+  room: String!
+}
+
+type MessageSendPayload {
+  message: BlockChatMessage!
+}
+
 type Mutation {
   decreaseCount: Counter!
   increaseCount: Counter!
+  messageSend(input: MessageSendInput!): MessageSendPayload!
   resetCount: Counter!
+  roomAddUser(input: RoomAddUserInput!): BlockChatRoom!
+  roomCreate(input: RoomCreateInput!): RoomCreatePayload!
+}
+
+"""
+PageInfo cursor, as defined in https://facebook.github.io/relay/graphql/connections.htm#sec-undefined.PageInfo
+"""
+type PageInfo {
+  """
+  The cursor corresponding to the last nodes in edges. Null if the connection is empty.
+  """
+  endCursor: String
+
+  """
+  Used to indicate whether more edges exist following the set defined by the clients arguments.
+  """
+  hasNextPage: Boolean!
+
+  """
+  Used to indicate whether more edges exist prior to the set defined by the clients arguments.
+  """
+  hasPreviousPage: Boolean!
+
+  """
+  The cursor corresponding to the first nodes in edges. Null if the connection is empty.
+  """
+  startCursor: String
 }
 
 type Query {
+  """For development purpose only"""
   accounts: [Account!]!
   getCount: Counter!
+  room(id: ID!): BlockChatRoom!
+  rooms(
+    """Returns the elements in the list that come after the specified cursor"""
+    after: String
+
+    """Returns the first n elements from the list."""
+    first: Int!
+  ): BlockChatRoomConnection
+}
+
+input RoomAddUserInput {
+  roomName: String!
+  userId: ID!
+}
+
+input RoomCreateInput {
+  name: String!
+}
+
+type RoomCreatePayload {
+  room: BlockChatRoom!
+}
+
+type Subscription {
+  messageAdded: MessageAddedPayload!
 }

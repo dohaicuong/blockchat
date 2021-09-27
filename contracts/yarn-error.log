@@ -1,0 +1,36 @@
+Arguments: 
+  /usr/local/bin/node /usr/local/Cellar/yarn/1.22.10/libexec/bin/yarn.js start
+
+PATH: 
+  /Users/ericdo/.serverless/bin:/usr/local/opt/php@7.4/bin:/Users/ericdo/.pyenv/shims:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/go/bin:/Users/ericdo/.serverless/bin:/usr/local/opt/php@7.4/bin:/Users/ericdo/.pyenv/shims:/Users/ericdo/.cargo/bin:/usr/local/opt/tcl-tk/bin:/usr/local/opt/tcl-tk/bin
+
+Yarn version: 
+  1.22.10
+
+Node version: 
+  14.17.4
+
+Platform: 
+  darwin x64
+
+Trace: 
+  Error: ENOSPC: no space left on device, open '/var/folders/7s/mqv3nkhn7pg5jqzvx2m2sr2w0000gn/T/yarn--1632661610697-0.26222622594895295/node'
+
+npm manifest: 
+  {
+    "scripts": {
+      "start": "ganache-cli",
+      "deploy": "cd contracts & truffle compile & truffle deploy && cp -r ./build/contracts ../backend/"
+    },
+    "name": "contracts",
+    "version": "1.0.0",
+    "main": "index.js",
+    "author": "Eric Do",
+    "license": "MIT"
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

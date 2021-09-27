@@ -13,6 +13,7 @@ export const AccountQuery = extendType({
   definition: t => {
     t.nonNull.list.nonNull.field('accounts', {
       type: 'Account',
+      description: 'For development purpose only',
       resolve: async (_, __, { getAccounts }) => {
         const accounts: any[] = await getAccounts()
 

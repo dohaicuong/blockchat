@@ -9,7 +9,21 @@ import { context } from './context'
 server.register(mercurius, {
   schema,
   graphiql: true,
-  context
+  subscription: true,
+  context,
+  errorFormatter: (execution, context) => {
+    execution.errors?.map(error => {
+      // @ts-ignore
+      if(error.originalError?.reason) error.message = error.originalError.reason
+      
+      return error
+    })
+
+    return {
+      statusCode: 500,
+      response: execution
+    }
+  }
 })
 
 // cors
